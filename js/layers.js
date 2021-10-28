@@ -1,3 +1,11 @@
+addLayer("a", {
+    name: "◈", // This is optional, only used in a few places, If absent it just uses the layer id.
+    symbol: "◈", // This appears on the layer's node. Default is the id with the first letter capitalized
+    position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
+    color: "#5e81ac",
+    row: "side", // Row the layer is in on the tree (0 is the first row)
+    tooltip: "Achievements"
+})
 addLayer("t", {
     name: "▲", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "▲", // This appears on the layer's node. Default is the id with the first letter capitalized
@@ -23,7 +31,7 @@ addLayer("t", {
     },
     row: 0, // Row the layer is in on the tree (0 is the first row)
     hotkeys: [
-      {key: "p", description: "P: Reset for prestige points", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
+      {key: "1", description: "1: Reset for ▲", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
     ],
     upgrades: {
       11: {
@@ -52,7 +60,7 @@ addLayer("t", {
     },
     layerShown(){return true}
 })
-addLayer("■", {
+addLayer("s", {
     name: "■", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "■", // This appears on the layer's node. Default is the id with the first letter capitalized
     position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
@@ -76,7 +84,14 @@ addLayer("■", {
     },
     row: 1, // Row the layer is in on the tree (0 is the first row)
     hotkeys: [
-        {key: "p", description: "P: Reset for prestige points", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
+        {key: "2", description: "2: ■", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
     ],
+    milestones: {
+      0: {
+        requirementDescription: "1 ■",
+        effectDescription: "■ increase ⬤ gain",
+        done() { return player.s.points.gte(1) }
+      },
+    },
     layerShown(){return true}
 })
