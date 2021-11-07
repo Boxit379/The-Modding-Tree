@@ -63,6 +63,7 @@ addLayer("s", {
     name: "■", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "■", // This appears on the layer's node. Default is the id with the first letter capitalized
     position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
+
     startData() { return {
         unlocked: false,
 		points: new Decimal(0),
@@ -71,8 +72,10 @@ addLayer("s", {
     requires: new Decimal(100), // Can be a function that takes requirement increases into account
     resource: "■", // Name of prestige currency
     baseResource: "⬤", // Name of resource prestige is based on
+    base: 2,
+    canBuyMax: true,
     baseAmount() {return player.points}, // Get the current amount of baseResource
-    type: "normal", // normal: cost to gain currency depends on amount gained. static: cost depends on how much you already have
+    type: "static", // normal: cost to gain currency depends on amount gained. static: cost depends on how much you already have
     exponent: 0.5, // Prestige currency exponent
     gainMult() { // Calculate the multiplier for main currency from bonuses
         mult = new Decimal(1)
@@ -86,11 +89,15 @@ addLayer("s", {
         {key: "2", description: "2: ■", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
     ],
     milestones: {
-      0: {
-        requirementDescription: "1 ■",
-        effectDescription: "■ increase ⬤ gain",
-        done() { return player.s.points.gt(1) }
-      },
+    },
+    effect(){
+      return Decimal.pow(2, player[this.layer].points)
+    },
+    effectDescription(){
+      return "multiplying point gain by " + format(tmp[this.layer].effect)
+      /*
+        use format(num) whenever displaying a number
+      */
     },
     layerShown(){return true}
 })
